@@ -1,38 +1,37 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { StyleSheet, View,TouchableHighlight, Image } from 'react-native';
+import Mapbox from '@mapbox/react-native-mapbox-gl';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+Mapbox.setAccessToken('pk.eyJ1IjoiZWRnYXIzMjgwIiwiYSI6ImNqZWMzaGtkNDE1ODQycXFlbzIzZHplZmMifQ.-zbRaTP4d2datg_DChElhg');
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component<{}> {
+
+  renderAnnotations () {
+    return (
+      <Mapbox.PointAnnotation
+        key='pointAnnotation'
+        id='pointAnnotation'
+        coordinate={[11.254, 43.772]}>
+
+        <View style={styles.annotationContainer}>
+          <View style={styles.annotationFill} />
+        </View>
+        <Mapbox.Callout title='Look! An annotation!' />
+      </Mapbox.PointAnnotation>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <Mapbox.MapView
+            styleURL={Mapbox.StyleURL.Dark}
+            zoomLevel={15}
+            centerCoordinate={[11.256, 43.770]}
+            style={styles.container}
+            showUserLocation={true}> 
+            {this.renderAnnotations()}
+        </Mapbox.MapView>
       </View>
     );
   }
@@ -41,18 +40,24 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  annotationContainer: {
+    width: 30,
+    height: 30,
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  annotationFill: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'orange',
+    transform: [{ scale: 0.6 }],
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  buttonGeolocation : {
+    backgroundColor:'transparent',
+  }
+
 });
