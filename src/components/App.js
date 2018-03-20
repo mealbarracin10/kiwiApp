@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, StyleSheet, View, TouchableHighlight, Image, TextInput } from 'react-native';
+import { Form, StyleSheet, View, TouchableHighlight, Image, TextInput, Platform, Alert } from 'react-native';
 import Mapbox from '@mapbox/react-native-mapbox-gl';
 import Map from './Map';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
@@ -9,6 +9,7 @@ import Dimensions from 'Dimensions';
 import location from '../Assets/images/location.png';
 import { getLocation } from '../Api/api-client'
 const DEVICE_HEIGHT = Dimensions.get('window').height
+const IS_ANDROID = Platform.OS === 'android';
 
 MapboxGL.setAccessToken(Constants.mapboxAccessToken);
 
@@ -24,8 +25,22 @@ export default class App extends Component<{}> {
       },
       destiny: "",
       isLocated: false,
+      isFetchingAndroidPermission: IS_ANDROID,
+      isAndroidPermissionGranted: false,
     }
   }
+
+  async componentWillMount(){
+      if (IS_ANDROID) {
+      const isGranted = await MapboxGL.requestAndroidLocationPermissions();
+      this.setState({
+        isAndroidPermissionGranted: isGranted,
+        isFetchingAndroidPermission: false,
+      });
+    }
+  }
+
+
   updateInputs() {
     destiny = this.state.destiny;
     this.setState({
@@ -35,6 +50,7 @@ export default class App extends Component<{}> {
       try {
         getLocation(this.state.destiny).then(place => {
           const Features = place.features
+          console.log("1. Features"+ Features)
           if (typeof Features !== 'undefined' && Features.length > 0) {
             const latLng = place.features[0].geometry.coordinates;
             if (!latLng) {
@@ -51,7 +67,12 @@ export default class App extends Component<{}> {
             return
           }
           else
+          {
+            Alert.alert('Location Error',destiny+' not found  !!!');
+            console.log("2. Not found located")
             return
+          }
+            
         })
       } catch (e) {
       }

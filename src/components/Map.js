@@ -3,6 +3,7 @@ import { View, StyleSheet, MapView } from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import PropTypes from 'prop-types';
 import Constants from '../helpers/constants.js';
+import Directions from './Directions'
 
 export default class ShowMap extends Component {
 
@@ -69,6 +70,9 @@ export default class ShowMap extends Component {
                         coordinate={dest}>
                         <MapboxGL.Callout title={destName} />
                     </MapboxGL.PointAnnotation>
+
+                    <Directions 
+                            source={this.state.srcLatLng} destiny={dest}/>
                 </MapboxGL.MapView>
             )
         }
