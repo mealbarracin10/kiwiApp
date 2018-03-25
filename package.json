@@ -9,6 +9,7 @@
   "dependencies": {
     "@mapbox/react-native-mapbox-gl": "^6.1.0",
     "mapbox": "^1.0.0-beta9",
+    "@turf/helpers": "^4.6.0",
     "react": "16.3.0-alpha.1",
     "react-native": "0.54.0",
     "react-native-vector-icons": "^4.5.0",
