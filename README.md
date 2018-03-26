@@ -21,4 +21,4 @@ Run IOS simulator :
 > react-native run-ios
 
 Run Android simulator :
-> react-native run-ios
+> react-native run-android
