@@ -4,6 +4,7 @@ import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import PropTypes from 'prop-types';
 import Constants from '../helpers/constants.js';
 import Directions from './Directions'
+import { Container, Header, Content, Button, Text } from 'native-base';
 
 export default class ShowMap extends Component {
 
@@ -31,21 +32,17 @@ export default class ShowMap extends Component {
         );
     }
 
+    getInstructions(instructions, distance, duration){
+        //this.moveCameraToFitBounds();
+        if (this.props.getInstructions) {
+            this.props.getInstructions(instructions, distance, duration);
+        }
+    }
+
     render() {
         const { dest, destName, isLocated } = this.props;
-        console.log("-----------------------------------")
-        console.log("nombre destino")
-        console.log(destName);
-        console.log("coordenadas destino")
-        console.log(dest);
-        console.log("coordenadas usuario")
-        console.log(this.state.srcLatLng);
-        console.log("se va a buscar destino")
-        console.log(isLocated);
-
         
         if (isLocated) {
-            console.log("entro a pintar fuente y destino")
             return (
                 <MapboxGL.MapView
                     style={styles.container}
@@ -72,8 +69,11 @@ export default class ShowMap extends Component {
                     </MapboxGL.PointAnnotation>
 
                     <Directions 
-                            source={this.state.srcLatLng} destiny={dest}/>
+                            source={this.state.srcLatLng} destiny={dest}
+                            directionsReturn={(instructions, distance, duration) => this.getInstructions(instructions, distance, duration)}
+                            />
                 </MapboxGL.MapView>
+                
             )
         }
         else {

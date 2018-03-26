@@ -4,25 +4,14 @@ import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import MapboxClient from 'mapbox';
 import Constants from '../helpers/constants.js';
 import { lineString } from '@turf/helpers';
+import { Container, Header, Content, Button, Text } from 'native-base';
 
 const layerStyles = MapboxGL.StyleSheet.create({
-    origin: {
-        circleRadius: 5,
-        circleColor: 'white',
-    },
-    destination: {
-        circleRadius: 5,
-        circleColor: 'white',
-    },
     route: {
         lineColor: 'red',
         lineWidth: 3,
         lineOpacity: 0.84,
-    },
-    progress: {
-        lineColor: '#314ccd',
-        lineWidth: 3,
-    },
+    }
 });
 
 export default class Directions extends Component {
@@ -81,19 +70,29 @@ export default class Directions extends Component {
 
         if (!(responseDirections.entity.routes)) {
             Alert.alert("Can't find a way there");
-              return
+            return
         }
 
         const directions = responseDirections.entity.routes[0];
         const distance = directions.distance;
         const duration = directions.duration;
         const steps = directions.legs[0].steps;
+
+        let instructions = [];
+        steps.forEach(step => {
+            instructions.push(step.maneuver.instruction);
+        });
+
+        if (this.props.directionsReturn) {
+            this.props.directionsReturn(instructions, distance, duration);
+        }
+
+
         this.setState({
-            route: lineString(directions.geometry.coordinates)
+            route: lineString(directions.geometry.coordinates),
         });
 
     }
-
 
     render() {
         if (!this.state.route) {
