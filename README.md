@@ -1,3 +1,3 @@
 # kiwiApp
 
-<a href="https://imgflip.com/gif/274rjs"><img src="https://i.imgflip.com/274rjs.gif" title="made at imgflip.com"/></a>
+<a href="https://giphy.com/gifs/1k2YxB325ZkaOhU42N/html5" title="Search location"/></a>
